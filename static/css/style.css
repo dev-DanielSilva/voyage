@@ -1,0 +1,25 @@
+* {
+    font-family: "Montserrat", sans-serif;
+}
+
+html, body {
+    height: 100%;
+}
+
+body{
+    display: flex;
+    flex-direction: column;
+}
+
+.footer {
+    background-color: #98A1AA;
+    padding: 30px;
+    text-align: center;
+}
+
+nav {
+    background-color: #2C3E50;
+}
+.navbar-brand {
+    padding-right: 30px;
+}
