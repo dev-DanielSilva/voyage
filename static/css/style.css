@@ -2,11 +2,12 @@
     font-family: "Montserrat", sans-serif;
 }
 
-html, body {
+html,
+body {
     height: 100%;
 }
 
-body{
+body {
     display: flex;
     flex-direction: column;
 }
@@ -20,6 +21,30 @@ body{
 nav {
     background-color: #2C3E50;
 }
+
 .navbar-brand {
     padding-right: 3vw;
+}
+
+.input-group-append, .button {
+    background-color: #008CBA;
+    color: #ffffff !important; 
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap; /* Permite que os itens se movam para a próxima linha */
+    margin: 0 -15px; /* Remove o espaço negativo */
+}
+
+.col-md-4 {
+    padding: 0 15px; /* Adiciona padding lateral às colunas */
+}
+
+.card {
+    width: 100%; /* Define a largura do cartão para 100% */
+    box-sizing: border-box; /* Para incluir padding e bordas na largura total */
+}
+h1, h2, h3, h4 {
+    color: #008CBA !important;
 }

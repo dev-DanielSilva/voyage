@@ -1,3 +1,56 @@
-{% extends 'base.html' %} {% block content %}
-    <p>Hospedagens</p>
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="text-center">Hospedagens</h1>
+
+    <!-- Formulário de Busca -->
+    <form action="{{ url_for('hospedagens') }}" method="GET" class="mb-3">
+        <div class="input-group">
+            <input type="text" 
+                   class="form-control" 
+                   placeholder="Buscar Hospedagens"
+                   name="busca"
+                   value="{{ busca_term }}">
+            <div class="input-group-append">
+                <button class="btn button" type="submit">Buscar</button>
+            </div>
+        </div>
+    </form>
+
+    <h3>Hospedagens disponíveis:</h3>
+    <div class="row">
+        {% if hospedagensLista %}
+            {% for hospedagem in hospedagensLista %}
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <img src="../static/imgs/quarto.jpg" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ hospedagem }}</h5>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12">
+                <div class="alert alert-warning">Nenhuma hospedagem encontrada!</div>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Formulário de Adição -->
+    <h4 class="mt-4">Deseja adicionar um novo lugar?</h4>
+    <form action="{{ url_for('hospedagens') }}" method="POST" class="form-inline">
+        <div class="input-group mb-3 p-1">
+            <input type="text" 
+                   name="hospedagem" 
+                   class="form-control" 
+                   placeholder="Adicionar Hospedagens"
+                   required>
+            <div class="input-group-append p-1">
+                <button class="btn button" type="submit">Adicionar</button>
+            </div>
+        </div>
+    </form>
+</div>
 {% endblock content %}

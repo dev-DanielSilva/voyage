@@ -1,7 +1,7 @@
-from flask import render_template, request, flash
+from flask import render_template, request, flash, redirect, url_for
 # lista de hospedagens
 hospedagensLista = ["Tauá Resort & Convention, Atibaia-SP",
-                    "Nannai Resort & Spa, - Porto de Galinhas-PE",
+                    "Nannai Resort & Spa, Porto de Galinhas-PE",
                     "Iberostar Selection Praia do Forte, Açu da Torre-BA",
                     ]
 # lista de viagens
@@ -90,5 +90,15 @@ def init_app(app):
             if request.form.get('hospedagem'):
                 hospedagensLista.append(request.form.get('hospedagem'))
                 flash('Hospedagem cadastrada com sucesso!', 'success')
+                return redirect(url_for('hospedagens'))  # Redireciona para evitar reenvio do formulário
 
-        return render_template('hospedagens.html', hospedagensLista=hospedagensLista)
+        # Processa a busca
+        busca_term = request.args.get('busca', '').lower()
+        if busca_term:
+            resultadoBusca = [h for h in hospedagensLista if busca_term in h.lower()]
+        else:
+            resultadoBusca = hospedagensLista
+
+        return render_template('hospedagens.html', 
+                            hospedagensLista=resultadoBusca,
+                            busca_term=busca_term)

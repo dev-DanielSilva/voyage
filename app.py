@@ -3,6 +3,7 @@ from flask import Flask
 from controllers import routes
 # carregando o Flask na variável app
 app = Flask(__name__, template_folder="views")
+app.secret_key = 'chave'    
 
 #Enviando o Flask (app) para a função init_app do routes
 routes.init_app(app)
