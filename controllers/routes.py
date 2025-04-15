@@ -61,17 +61,34 @@ def init_app(app):
 
     @app.route('/usuarios', methods=['GET', 'POST'])
     def usuarios():
+        busca_term = request.args.get('busca', '').lower()
+        
         if request.method == 'POST':
-            if request.form.get('nome') and request.form.get('cpf') and request.form.get('e-mail') and request.form.get('telefone'):
-                usersLista.append({
-                    'Nome': request.form.get('nome'),
-                    'CPF': request.form.get('cpf'),
-                    'E-mail': request.form.get('e-mail'),
-                    'Telefone': request.form.get('telefone')
-                })
+            # Adicionar novo usuário
+            novo_usuario = {
+                'Nome': request.form.get('nome'),
+                'CPF': request.form.get('cpf'),
+                'E-mail': request.form.get('e-mail'),
+                'Telefone': request.form.get('telefone')
+            }
+            usersLista.append(novo_usuario)
+            flash('Usuário cadastrado com sucesso!', 'success')
+            return redirect(url_for('usuarios'))
+
+        # Filtrar resultados da busca
+        if busca_term:
+            resultado_busca = [usuario for usuario in usersLista if
+                busca_term in usuario['Nome'].lower() or
+                busca_term in usuario['CPF'].lower() or
+                busca_term in usuario['E-mail'].lower() or
+                busca_term in usuario['Telefone'].lower()
+            ]
+        else:
+            resultado_busca = usersLista
+
         return render_template('usuarios.html',
-                               usersLista=usersLista
-                               )
+                            usersLista=resultado_busca,
+                            busca_term=busca_term)
 
     @app.route('/viagens', methods=['GET', 'POST'])
     def viagens():
