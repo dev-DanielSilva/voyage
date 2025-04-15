@@ -1,3 +1,50 @@
 {% extends 'base.html' %} {% block content %}
-    <p>Oi</p>
+
+<header class="fundo position-relative">
+    <div
+        class="container h-100 d-flex flex-column justify-content-center align-items-center text-center position-relative">
+        <h1 class="titulo display-3 fw-bold mb-4">O mundo é<br>seu destino</h1>
+        <div class="d-flex">
+            <a href="/viagens" class="btn button m-1">Viagens</a>
+            <a href="/hospedagens" class="btn button m-1">Hospedagens</a>
+        </div>
+    </div>
+</header>
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">Conheça os lugares mais visitados do mundo</h2>
+
+        <div class="row g-4">
+            {% for viagem in viagensLista %}
+            <div class="col-md-4">
+                <div class="card h-100 shadow">
+                    <img src="{{ viagem.Imagem }}" class="card-img-top" alt="{{ viagem.Local }}"
+                        style="height: 200px; object-fit: cover;">
+
+                    <div class="card-body">
+                        <h5 class="card-title">{{ viagem.Local }}</h5>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Preço: R$ {{ viagem.Preço }}</li>
+                            <li class="list-group-item">Duração: {{ viagem.Tempo }} dias</li>
+                            <li class="list-group-item">Partida: {{ viagem.Data }}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-6 custom-container">
+            <h2 class="text-light">Faça seu cadastro e planeje sua viagem já!</h2>
+            <a href="/usuarios" class="btn text-light custom-button">Cadastre-se</a>
+        </div>
+        <div class="col-md-6 custom-image"></div>
+    </div>
+</div>
+
+
+
 {% endblock content %}

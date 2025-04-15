@@ -12,18 +12,21 @@ viagensLista = [
         'Preço': '1399,99',
         'Tempo': '10',
         'Data': '12 de janeiro',
+        'Imagem': 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?ixlib=rb-1.2.1&auto=format&fit=crop&w=1352&q=80' 
     },
     {
         'Local': 'Rio de Janeiro',
         'Preço': '799,99',
         'Tempo': '15',
         'Data': '23 de agosto',
+        'Imagem': 'https://images.unsplash.com/photo-1483729558449-99ef09a8c325?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1350&q=80'
     },
     {
         'Local': 'Tóquio',
         'Preço': '1111,99',
         'Tempo': '9',
         'Data': '22 de novembro',
+        'Imagem': 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1371&q=80'
     }
 ]
 
@@ -54,7 +57,7 @@ def init_app(app):
     # criando a rota principal do site
     @app.route('/')
     def home():
-        return render_template('index.html')
+        return render_template('index.html', viagensLista=viagensLista)
 
     @app.route('/usuarios', methods=['GET', 'POST'])
     def usuarios():
@@ -90,15 +93,17 @@ def init_app(app):
             if request.form.get('hospedagem'):
                 hospedagensLista.append(request.form.get('hospedagem'))
                 flash('Hospedagem cadastrada com sucesso!', 'success')
-                return redirect(url_for('hospedagens'))  # Redireciona para evitar reenvio do formulário
+                # Redireciona para evitar reenvio do formulário
+                return redirect(url_for('hospedagens'))
 
         # Processa a busca
         busca_term = request.args.get('busca', '').lower()
         if busca_term:
-            resultadoBusca = [h for h in hospedagensLista if busca_term in h.lower()]
+            resultadoBusca = [
+                h for h in hospedagensLista if busca_term in h.lower()]
         else:
             resultadoBusca = hospedagensLista
 
-        return render_template('hospedagens.html', 
-                            hospedagensLista=resultadoBusca,
-                            busca_term=busca_term)
+        return render_template('hospedagens.html',
+                               hospedagensLista=resultadoBusca,
+                               busca_term=busca_term)

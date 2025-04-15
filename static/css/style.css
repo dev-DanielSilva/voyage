@@ -27,7 +27,7 @@ nav {
 }
 
 .input-group-append, .button {
-    background-color: #008CBA;
+    background-color: #008CBA !important;
     color: #ffffff !important; 
 }
 
@@ -47,4 +47,53 @@ nav {
 }
 h1, h2, h3, h4 {
     color: #008CBA !important;
+}
+
+.fundo {
+    flex: 1;
+    background-image: url("/static/imgs/banner.jpg");
+    background-size: cover;
+    background-position: center;
+    min-height: 60vh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+   
+}
+
+.fundo::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: rgba(236, 229, 229, 0.6);
+}
+
+.custom-container {
+    background-color: #016064; 
+    color: white;
+    padding: 2rem;
+    display: flex;
+    min-height: 500px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.custom-image {
+    background-image: url('/static/imgs/family.png');
+    background-size: cover;
+    background-position: center;
+    min-height: 500px;
+}
+
+.custom-button {
+    border: 1px solid #ffffff !important;
+    color: #ffffff !important;
+    max-width: 300px;
+    width: 90%; 
+    padding: 12px 24px;
+    margin-top: 2rem;
+    transition: all 0.3s ease;
 }
