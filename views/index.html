@@ -15,7 +15,7 @@
         <h2 class="text-center mb-5">Conheça os lugares mais visitados do mundo</h2>
 
         <div class="row g-4">
-            {% for viagem in viagensLista %}
+            {% for viagem in viagensLista[:3] %}
             <div class="col-md-4">
                 <div class="card h-100 shadow">
                     <img src="{{ viagem.Imagem }}" class="card-img-top" alt="{{ viagem.Local }}"

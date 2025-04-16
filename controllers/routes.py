@@ -1,5 +1,6 @@
 from flask import render_template, request, flash, redirect, url_for
-
+from werkzeug.utils import secure_filename
+import os
 # lista de hospedagens
 hospedagensLista = ["Tauá Resort & Convention, Atibaia-SP",
                     "Nannai Resort & Spa, Porto de Galinhas-PE",
@@ -54,6 +55,8 @@ usersLista = [
 ]
 
 def init_app(app):
+    app.config['UPLOAD_FOLDER'] = os.path.join(app.root_path, 'static', 'uploads')
+    os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
     # criando a rota principal do site
     @app.route('/')
     def home():
@@ -95,19 +98,33 @@ def init_app(app):
         busca_term = request.args.get('busca', '').lower()
         
         if request.method == 'POST':
-            # Verifica se todos os campos foram preenchidos corretamente
-            if all([request.form.get('Local'), request.form.get('Preço'), 
-                   request.form.get('Duração'), request.form.get('Data')]):
+            # Verificar campos obrigatórios
+            campos_obrigatorios = ['Local', 'Preço', 'Duração', 'Data']
+            if all(request.form.get(campo) for campo in campos_obrigatorios):
+                # Processar upload da imagem
+                imagem = request.files.get('imagem')
+                imagem_url = 'https://via.placeholder.com/300'  # URL padrão
+
+                if imagem and imagem.filename != '':
+                    filename = secure_filename(imagem.filename)
+                    filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                    imagem.save(filepath)
+                    imagem_url = url_for('static', filename=f'uploads/{filename}')
+
                 nova_viagem = {
-                    'Local': request.form.get('Local'),
-                    'Preço': request.form.get('Preço'),
-                    'Duração': request.form.get('Duração'),
-                    'Data': request.form.get('Data'),
-                    'Imagem': request.form.get('imagem') or 'https://via.placeholder.com/300'
+                    'Local': request.form['Local'],
+                    'Preço': request.form['Preço'],
+                    'Duração': request.form['Duração'],
+                    'Data': request.form['Data'],
+                    'Imagem': imagem_url
                 }
                 viagensLista.append(nova_viagem)
                 flash('Viagem cadastrada com sucesso!', 'success')
                 return redirect(url_for('viagens'))
+            else:
+                flash('Preencha todos os campos obrigatórios!', 'danger')
+
+    # Resto do código da rota...
 
         # Filtrar resultados da busca
         if busca_term:
