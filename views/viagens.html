@@ -1,3 +1,111 @@
-{% extends 'base.html' %} {% block content %}
-    <p>Viagens</p>
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-8">
+            <h1 class="text-center mb-4">Cadastro de Viagens</h1>
+
+            
+            <form method="GET" action="{{ url_for('viagens') }}" class="d-flex justify-content-center mb-4">
+                <div class="col-md-8">
+                    <div class="input-group">
+                        <input type="text" class="form-control text-center" 
+                               placeholder="Buscar Viagens" 
+                               name="busca" 
+                               value="{{ busca_term }}">
+                        <div class="input-group-append">
+                            <button class="btn button" type="submit">Buscar</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h4 class="card-title text-center mb-4">Nova Viagem</h4>
+                    <form method="POST" enctype="multipart/form-data">
+                        <div class="row justify-content-center">
+                            <div class="col-md-8">
+
+                             
+                                <div class="form-group text-center mb-1">
+                                    <label for="Local">Local de Partida</label>
+                                    <input type="text" class="form-control text-center mx-auto" 
+                                           id="Local" name="Local" 
+                                           style="max-width: 400px;" required>
+                                </div>
+
+                            
+                                <div class="form-group text-center mb-1">
+                                    <label for="Preço">Preço</label>
+                                    <input type="text" class="form-control text-center mx-auto" 
+                                           id="Preço" name="Preço" 
+                                           style="max-width: 400px;" required>
+                                </div>
+
+                          
+                                <div class="form-group text-center mb-1">
+                                    <label for="Duração">Duração</label>
+                                    <input type="text" class="form-control text-center mx-auto" 
+                                           id="Duração" name="Duração" 
+                                           style="max-width: 400px;" required>
+                                </div>
+
+                           
+                                <div class="form-group text-center mb-1">
+                                    <label for="Data">Data</label>
+                                    <input type="text" class="form-control text-center mx-auto" 
+                                           id="Data" name="Data" 
+                                           style="max-width: 400px;" required>
+                                </div>
+
+                                
+                                <div class="form-group text-center mb-1">
+                                    <label for="imagem">Imagem da Viagem</label>
+                                    <input type="file" class="form-control-file mx-auto"
+                                           id="imagem" name="imagem"
+                                           style="max-width: 400px;" accept="image/*" required>
+                                </div>
+
+                                <div class="text-center mt-4">
+                                    <button type="submit" class="btn button px-5">Cadastrar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+      
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title text-center mb-4">Viagens Cadastradas</h5>
+                    <div class="row g-4">
+                        {% for viagem in viagensLista %}
+                        <div class="col-md-4">
+                            <div class="card h-100 shadow">
+                                <img src="{{ viagem.Imagem }}" class="card-img-top" alt="{{ viagem.Local }}"
+                                    style="height: 200px; object-fit: cover;">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ viagem.Local }}</h5>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item">Preço: R$ {{ viagem.Preço }}</li>
+                                        <li class="list-group-item">Duração: {{ viagem.Tempo }} dias</li>
+                                        <li class="list-group-item">Partida: {{ viagem.Data }}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        {% else %}
+                        <p class="text-center">Nenhuma viagem cadastrada</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 {% endblock content %}
