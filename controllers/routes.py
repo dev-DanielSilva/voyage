@@ -1,11 +1,30 @@
 from flask import render_template, request, flash, redirect, url_for
 from werkzeug.utils import secure_filename
+
 import os
+
 # lista de hospedagens
-hospedagensLista = ["Tauá Resort & Convention, Atibaia-SP",
-                    "Nannai Resort & Spa, Porto de Galinhas-PE",
-                    "Iberostar Selection Praia do Forte, Açu da Torre-BA",
-                    ]
+hospedagensLista = [
+    {
+        'Nome': 'Tauá Resort & Convention',
+        'Local': 'Atibaia-SP',
+        'Preço': 'R$ 450/noite',
+        'Check-in': '15:00',
+        'Check-out': '12:00',
+        'Descrição': 'Resort com piscinas térmicas e ampla área verde',
+        'Imagem': '/static/imgs/quarto.jpg'
+    },
+    {
+        'Nome': 'Nannai Resort & Spa',
+        'Local': 'Porto de Galinhas-PE',
+        'Preço': 'R$ 890/noite',
+        'Check-in': '14:00',
+        'Check-out': '11:00', 
+        'Descrição': 'Resort frente ao mar com all-inclusive',
+        'Imagem': '/static/imgs/quarto2.jpg'
+    }
+]
+
 
 # lista de viagens
 viagensLista = [
@@ -53,6 +72,8 @@ usersLista = [
         'Telefone': '(31) 99876-5432'
     }
 ]
+# Lista de feedbacks
+feedbacksLista = []
 
 def init_app(app):
     app.config['UPLOAD_FOLDER'] = os.path.join(app.root_path, 'static', 'uploads')
@@ -144,20 +165,61 @@ def init_app(app):
 
     @app.route('/hospedagens', methods=['GET', 'POST'])
     def hospedagens():
+        
         if request.method == 'POST':
-            if request.form.get('hospedagem'):
-                hospedagensLista.append(request.form.get('hospedagem'))
-                flash('Hospedagem cadastrada com sucesso!', 'success')
-                return redirect(url_for('hospedagens'))
+            # Processar upload de imagem
+            imagem = request.files.get('imagem')
+            imagem_url = '/static/imgs/quarto.jpg'  # Imagem padrão
+            
+            if imagem and imagem.filename != '':
+                filename = secure_filename(imagem.filename)
+                filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                imagem.save(filepath)
+                imagem_url = url_for('static', filename=f'uploads/{filename}')
 
-        # Processa a busca
+            nova_hospedagem = {
+                'Nome': request.form.get('nome'),
+                'Local': request.form.get('local'),
+                'Preço': request.form.get('preco'),
+                'Check-in': request.form.get('checkin'),
+                'Check-out': request.form.get('checkout'),
+                'Descrição': request.form.get('descricao'),
+                'Imagem': imagem_url
+            }
+            
+            hospedagensLista.append(nova_hospedagem)
+            flash('Hospedagem cadastrada com sucesso!', 'success')
+            return redirect(url_for('hospedagens'))
+
+        # Processar busca
         busca_term = request.args.get('busca', '').lower()
         if busca_term:
-            resultadoBusca = [
-                h for h in hospedagensLista if busca_term in h.lower()]
+            resultadoBusca = [h for h in hospedagensLista if
+                busca_term in h['Nome'].lower() or
+                busca_term in h['Local'].lower() or
+                busca_term in h['Descrição'].lower()]
         else:
             resultadoBusca = hospedagensLista
 
         return render_template('hospedagens.html',
                             hospedagensLista=resultadoBusca,
                             busca_term=busca_term)
+    @app.route('/feedbacks', methods=['GET', 'POST'])
+    def feedbacks():
+        if request.method == 'POST':
+            # coleta dados do formulário
+            nome = request.form.get('nome', 'Anônimo')
+            comentario = request.form.get('comentario', '')
+            nota = int(request.form.get('nota', 0))
+
+            # adiciona à lista
+            feedbacksLista.append({
+                'nome': nome,
+                'comentario': comentario,
+                'nota': nota
+            })
+            flash('Obrigado pelo feedback!', 'success')
+            return redirect(url_for('feedbacks'))
+
+        # GET: exibe formulário + feedbacks
+        return render_template('feedbacks.html', feedbacks=feedbacksLista)

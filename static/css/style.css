@@ -10,7 +10,8 @@ body {
 body {
     display: flex;
     flex-direction: column;
-}
+    min-height: 100vh;    /* garante que seja pelo menos a altura da viewport */
+  }
 
 .footer {
     background-color: #98A1AA;
@@ -28,8 +29,10 @@ nav {
 
 .input-group-append, .button {
     background-color: #008CBA !important;
-    color: #ffffff !important; 
+    color: #ffffff !important;
+    transition: all 0.3s ease; /* Adicionei transição aqui */
 }
+
 
 .row {
     display: flex;
@@ -96,4 +99,55 @@ h1, h2, h3, h4 {
     padding: 12px 24px;
     margin-top: 2rem;
     transition: all 0.3s ease;
+    position: relative; 
 }
+
+/* Efeitos Hover */
+.button:hover, .custom-button:hover {
+    background-color: #007399 !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    cursor: pointer; 
+}
+
+.input-group-append:hover {
+    transform: none;
+    box-shadow: none; 
+    opacity: 0.9; 
+}
+/* Estrelas de feedback */
+.rating-stars {
+    direction: rtl;
+    unicode-bidi: bidi-override;
+    display: inline-block;
+  }
+  .rating-stars input {
+    display: none;
+  }
+  .rating-stars .star {
+    font-size: 2rem;
+    color: #ccc;
+    cursor: pointer;
+    margin-left: 5px;
+    transition: color 0.2s;
+  }
+  rating-stars .star:first-of-type {
+    margin-left: 0;
+  }
+  /* Hover */
+  .rating-stars .star:hover,
+  .rating-stars .star:hover ~ .star {
+    color: #ffca28;
+  }
+  /* Selecionado */
+  .rating-stars input:checked + .star,
+  .rating-stars input:checked + .star ~ .star {
+    color: #ffc107;
+  }
+  /* Estrelas exibidas */
+  .rating .star {
+    font-size: 1.5rem;
+    color: #ccc;
+  }
+  .rating .star.active {
+    color: #ffc107;
+  }

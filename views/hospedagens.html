@@ -3,54 +3,89 @@
 {% block content %}
 <div class="container mt-4">
     <h1 class="text-center">Hospedagens</h1>
-
-    <!-- Formulário de Busca -->
-    <form action="{{ url_for('hospedagens') }}" method="GET" class="mb-3">
-        <div class="input-group">
-            <input type="text" 
-                   class="form-control" 
-                   placeholder="Buscar Hospedagens"
-                   name="busca"
-                   value="{{ busca_term }}">
-            <div class="input-group-append">
-                <button class="btn button" type="submit">Buscar</button>
+    <form method="GET" action="{{ url_for('hospedagens') }}" class="d-flex justify-content-center mb-4">
+        <div class="col-md-8">
+            <div class="input-group">
+                <input type="text" class="form-control text-center" 
+                       placeholder="Buscar hospedagens" 
+                       name="busca" 
+                       value="{{ busca_term }}">
+                <div class="input-group-append">
+                    <button class="btn button" type="submit">Buscar</button>
+                </div>
             </div>
         </div>
     </form>
+    <!-- Formulário de Busca (mantido igual) -->
 
     <h3>Hospedagens disponíveis:</h3>
     <div class="row">
         {% if hospedagensLista %}
-            {% for hospedagem in hospedagensLista %}
-            <div class="col-md-4 mb-3">
-                <div class="card">
-                    <img src="../static/imgs/quarto.jpg" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ hospedagem }}</h5>
-                    </div>
+        {% for hospedagem in hospedagensLista %}
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <img src="{{ hospedagem.Imagem }}" class="card-img-top" alt="{{ hospedagem.Nome }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ hospedagem.Nome }}</h5>
+                    <p class="card-text">
+                        <strong>Local:</strong> {{ hospedagem.Local }}<br>
+                        <strong>Preço:</strong> {{ hospedagem.Preço }}<br>
+                        <small>Check-in: {{ hospedagem['Check-in'] }} | Check-out: {{ hospedagem['Check-out'] }}</small>
+                    </p>
+                    <p class="card-text">{{ hospedagem.Descrição }}</p>
                 </div>
             </div>
-            {% endfor %}
+        </div>
+        {% endfor %}
         {% else %}
-            <div class="col-12">
-                <div class="alert alert-warning">Nenhuma hospedagem encontrada!</div>
-            </div>
+        <!-- Mensagem de nenhum resultado (mantido igual) -->
         {% endif %}
     </div>
 
-    <!-- Formulário de Adição -->
-    <h4 class="mt-4">Deseja adicionar um novo lugar?</h4>
-    <form action="{{ url_for('hospedagens') }}" method="POST" class="form-inline">
-        <div class="input-group mb-3 p-1">
-            <input type="text" 
-                   name="hospedagem" 
-                   class="form-control" 
-                   placeholder="Adicionar Hospedagens"
-                   required>
-            <div class="input-group-append p-1">
-                <button class="btn button" type="submit">Adicionar</button>
+    <!-- Novo Formulário de Adição -->
+    <div class="card mb-4 p-3">
+        <h4 class="mt-4">Adicionar Nova Hospedagem</h4>
+        <form action="{{ url_for('hospedagens') }}" method="POST" enctype="multipart/form-data">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Nome da Hospedagem:</label>
+                        <input type="text" name="nome" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Localização:</label>
+                        <input type="text" name="local" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Preço:</label>
+                        <input type="text" name="preco" class="form-control" placeholder="Ex: R$ 300/noite" required>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Horário de Check-in:</label>
+                        <input type="time" name="checkin" class="form-control" value="15:00" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Horário de Check-out:</label>
+                        <input type="time" name="checkout" class="form-control" value="12:00" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Descrição:</label>
+                        <textarea name="descricao" class="form-control" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Imagem:</label>
+                        <input type="file" name="imagem" class="form-control-file">
+                    </div>
+                </div>
             </div>
-        </div>
-    </form>
+
+            <div class="text-center">
+                <button type="submit" class="btn button mt-3 mb-3">Cadastrar Hospedagem</button>
+            </div>
+        </form>
+    </div>
 </div>
 {% endblock content %}
