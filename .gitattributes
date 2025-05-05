@@ -1,1 +1,9 @@
-*.python linguist-detectable=true
+# 1) Marcar todos os .html como Python
+*.html linguist-language=Python
+
+# 2) (Opcional) Garantir que seus .py sejam sempre reconhecidos como Python
+*.py linguist-language=Python
+
+# 3) (Opcional) Ignorar arquivos HTML “vendidos” (por exemplo, templates gerados)
+#    para que não contem na estatística de linguagens
+*.html linguist-vendored
